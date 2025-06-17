@@ -358,11 +358,6 @@ int main (int argc, char **argv)
 			printf ("verbose = true\n");
 			verbose = true;
 		}
-		else if (!strcmp(argv[i], "-draw"))
-		{
-			printf ("drawflag = true\n");
-			drawflag = true;
-		}
 		else if (!strcmp(argv[i], "-noweld"))
 		{
 			printf ("noweld = true\n");
@@ -463,7 +458,7 @@ int main (int argc, char **argv)
 			block_yl = atoi(argv[i+2]);
 			block_xh = atoi(argv[i+3]);
 			block_yh = atoi(argv[i+4]);
-			printf ("blocks: %i,%i to %i,%i\n", 
+			printf ("blocks: %i,%i to %i,%i\n",
 				block_xl, block_yl, block_xh, block_yh);
 			i+=4;
 		}
@@ -495,7 +490,7 @@ numthreads = 1;		// multiple threads aren't helping...
 	sprintf (path, "%s.lin", source);
 	remove (path);
 
-	strcpy (name, ExpandArg (argv[i]));	
+	strcpy (name, ExpandArg (argv[i]));
 	DefaultExtension (name, ".map");	// might be .reg
 
 	//

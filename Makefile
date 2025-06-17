@@ -191,7 +191,6 @@ QBSP_OBJS_ = \
 		src/qbsp3/glfile.o \
 		src/qbsp3/leakfile.o \
 		src/qbsp3/map.o \
-		src/qbsp3/nodraw.o \
 		src/qbsp3/portals.o \
 		src/qbsp3/prtfile.o \
 		src/qbsp3/qbsp3.o \

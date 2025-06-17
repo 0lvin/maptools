@@ -23,16 +23,18 @@ ARCH := $(shell uname -m | sed -e s/i.86/i386/ -e s/amd64/x86_64/)
 # (You'll need some #ifdef for your unsupported  plattform!)
 ifneq ($(ARCH),i386)
 ifneq ($(ARCH),x86_64)
+ifneq ($(ARCH),aarch64)
 $(error arch $(ARCH) is currently not supported)
+endif
 endif
 endif
 
 # ----------
 
-# Base CFLAGS. 
+# Base CFLAGS.
 #
 # -O2 are enough optimizations.
-# 
+#
 # -fno-strict-aliasing since the source doesn't comply
 #  with strict aliasing rules and it's next to impossible
 #  to get it there...
@@ -64,7 +66,7 @@ ifeq ($(OSTYPE),Linux)
 LDFLAGS := -L/usr/lib -lm
 else ifeq ($(OSTYPE),FreeBSD)
 LDFLAGS := -L/usr/local/lib -lm
-endif 
+endif
 
 # ----------
 
@@ -75,30 +77,30 @@ ifdef VERBOSE
 Q :=
 else
 Q := @
-endif 
+endif
 
-# ---------- 
+# ----------
 
 # Builds everything
 all: bspinfo qbsp3 qdata qrad3 qvis3
-	
-# ---------- 
+
+# ----------
 
 # Cleanup
 clean:
 	@echo "===> CLEAN"
 	${Q}rm -Rf build release
- 
+
 # ----------
- 
+
 # common stuff
 build/common/%.o: %.c
 	@echo '===> CC $<'
 	${Q}mkdir -p $(@D)
 	${Q}$(CC) -c $(CFLAGS) $(INCLUDE) -o $@ $<
- 
+
 # ----------
- 
+
 # bspinfo
 bspinfo:
 	@echo '===> Building bspinfo'
@@ -109,7 +111,7 @@ build/bspinfo/%.o: %.c
 	@echo '===> CC $<'
 	${Q}mkdir -p $(@D)
 	${Q}$(CC) -c $(CFLAGS) $(INCLUDE) -o $@ $<
- 
+
 # ----------
 
 # qbsp3
@@ -122,9 +124,9 @@ build/qbsp3/%.o: %.c
 	@echo '===> CC $<'
 	${Q}mkdir -p $(@D)
 	${Q}$(CC) -c $(CFLAGS) $(INCLUDE) -o $@ $<
-  
+
 # ----------
- 
+
 # qdata
 qdata:
 	@echo '===> Building qdata'
@@ -137,7 +139,7 @@ build/qdata/%.o: %.c
 	${Q}$(CC) -c $(CFLAGS) $(INCLUDE) -o $@ $<
 
 # ----------
-                         
+
 # qrad3
 qrad3:
 	@echo '===> Building qrad3'
@@ -148,7 +150,7 @@ build/qrad3/%.o: %.c
 	@echo '===> CC $<'
 	${Q}mkdir -p $(@D)
 	${Q}$(CC) -c $(CFLAGS) $(INCLUDE) -o $@ $<
- 
+
 # ----------
 
 # qvis3
@@ -161,7 +163,7 @@ build/qvis3/%.o: %.c
 	@echo '===> CC $<'
 	${Q}mkdir -p $(@D)
 	${Q}$(CC) -c $(CFLAGS) $(INCLUDE) -o $@ $<
-     
+
 # ----------
 
 # Common objects
@@ -196,7 +198,7 @@ QBSP_OBJS_ = \
 		src/qbsp3/textures.o \
 		src/qbsp3/tree.o \
 		src/qbsp3/writebsp.o
- 
+
 # Used by qdata
 QDATA_OBJS_ = \
 		src/qdata/images.o \
@@ -205,7 +207,7 @@ QDATA_OBJS_ = \
 		src/qdata/sprites.o \
 		src/qdata/tables.o \
 		src/qdata/video.o
- 
+
 # Used by qrad3
 QRAD_OBJS_ = \
 		src/qrad3/lightmap.o \
@@ -240,37 +242,37 @@ QVIS_DEPS= $(QVIS_OBJS:.o=.d)
 
 # ----------
 
--include $(COMMON_DEPS) 
--include $(BSPINFO_DEPS) 
--include $(QBSP_DEPS) 
--include $(QDATA_DEPS) 
--include $(QRAD_DEPS) 
--include $(QVIS_DEPS) 
+-include $(COMMON_DEPS)
+-include $(BSPINFO_DEPS)
+-include $(QBSP_DEPS)
+-include $(QDATA_DEPS)
+-include $(QRAD_DEPS)
+-include $(QVIS_DEPS)
 
 # ----------
 
 # release/bspinfo
-release/bspinfo : $(COMMON_OBJS) $(BSPINFO_OBJS) 
+release/bspinfo : $(COMMON_OBJS) $(BSPINFO_OBJS)
 	@echo '===> LD $@'
 	${Q}$(CC) $(COMMON_OBJS) $(BSPINFO_OBJS) $(LDFLAGS) -o $@
- 
+
 # release/qbsp3
-release/qbsp3 : $(COMMON_OBJS) $(QBSP_OBJS) 
+release/qbsp3 : $(COMMON_OBJS) $(QBSP_OBJS)
 	@echo '===> LD $@'
 	${Q}$(CC) $(COMMON_OBJS) $(QBSP_OBJS) $(LDFLAGS) -o $@
- 
+
 # release/qdata
-release/qdata : $(COMMON_OBJS) $(QDATA_OBJS) 
+release/qdata : $(COMMON_OBJS) $(QDATA_OBJS)
 	@echo '===> LD $@'
 	${Q}$(CC) $(COMMON_OBJS) $(QDATA_OBJS) $(LDFLAGS) -o $@
-  
+
 # release/qrad3
-release/qrad3 : $(COMMON_OBJS) $(QRAD_OBJS) 
+release/qrad3 : $(COMMON_OBJS) $(QRAD_OBJS)
 	@echo '===> LD $@'
 	${Q}$(CC) $(COMMON_OBJS) $(QRAD_OBJS) $(LDFLAGS) -o $@
-   
+
 # release/qvis3
-release/qvis3 : $(COMMON_OBJS) $(QVIS_OBJS) 
+release/qvis3 : $(COMMON_OBJS) $(QVIS_OBJS)
 	@echo '===> LD $@'
 	${Q}$(CC) $(COMMON_OBJS) $(QVIS_OBJS) $(LDFLAGS) -o $@
- 
+

@@ -25,6 +25,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "cmdlib.h"
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <unistd.h>
 
 #ifdef WIN32
 #include <direct.h>
@@ -34,7 +35,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include <libc.h>
 #endif
 
-#define	BASEDIRNAME	"quake2"
+#define	BASEDIRNAME	"baseq2"
 #define PATHSEPERATOR   '/'
 
 // set these before calling CheckParm
@@ -306,11 +307,11 @@ double I_FloatTime (void)
 void Q_getwd (char *out)
 {
 #ifdef WIN32
-   _getcwd (out, 256);
-   strcat (out, "\\");
+	_getcwd(out, 256);
+	strcat(out, "\\");
 #else
-   getwd (out);
-   strcat (out, "/");
+	getcwd(out, 256);
+	strcat(out, "/");
 #endif
 }
 
@@ -319,13 +320,19 @@ void Q_mkdir (char *path)
 {
 #ifdef WIN32
 	if (_mkdir (path) != -1)
+	{
 		return;
+	}
 #else
 	if (mkdir (path, 0777) != -1)
+	{
 		return;
+	}
 #endif
 	if (errno != EEXIST)
+	{
 		Error ("mkdir %s: %s",path, strerror(errno));
+	}
 }
 
 /*

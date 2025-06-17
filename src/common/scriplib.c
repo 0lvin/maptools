@@ -135,7 +135,7 @@ void UnGetToken (void)
 qboolean EndOfScript (qboolean crossline)
 {
 	if (!crossline)
-		Error ("Line %i is incomplete\n",scriptline);
+		Error ("%s: Line %i is incomplete\n", __func__, scriptline);
 
 	if (!strcmp (script->filename, "memory buffer"))
 	{
@@ -184,7 +184,7 @@ skipspace:
 		if (*script->script_p++ == '\n')
 		{
 			if (!crossline)
-				Error ("Line %i is incomplete\n",scriptline);
+				Error ("%s: Line %i is incomplete\n", __func__, scriptline);
 			scriptline = script->line++;
 		}
 	}
@@ -197,7 +197,7 @@ skipspace:
 		|| ( script->script_p[0] == '/' && script->script_p[1] == '/') )
 	{
 		if (!crossline)
-			Error ("Line %i is incomplete\n",scriptline);
+			Error ("%s: Line %i is incomplete\n", __func__, scriptline);
 		while (*script->script_p++ != '\n')
 			if (script->script_p >= script->end_p)
 				return EndOfScript (crossline);
@@ -208,7 +208,7 @@ skipspace:
 	if (script->script_p[0] == '/' && script->script_p[1] == '*')
 	{
 		if (!crossline)
-			Error ("Line %i is incomplete\n",scriptline);
+			Error ("%s: Line %i is incomplete\n", __func__, scriptline);
 		script->script_p+=2;
 		while (script->script_p[0] != '*' && script->script_p[1] != '/')
 		{
